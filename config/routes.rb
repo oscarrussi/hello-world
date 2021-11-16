@@ -13,6 +13,9 @@ Rails.application.routes.draw do
     resources :categories, only: [:index]
     resources :login, only: [:create]
     resources :users, only: [:create]
+    resources :articles, only: [:show] do
+    resources :comments, only: [:index], controller: "articles/comments"
+  end
     put "categories/update_many", to: "categories#update_many"
   end
 end

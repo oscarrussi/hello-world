@@ -1,5 +1,6 @@
 module Api
   class ApiController < ActionController::API
+    include Pagy::Backend
 
     def authenticate_user
       decoded_token = JWT.decode(request.headers['Authorization'], Rails.application.credentials[:secret_token], false,
