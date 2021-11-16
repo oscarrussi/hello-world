@@ -7,4 +7,6 @@ class User < ApplicationRecord
   validates_presence_of :password_confirmation
   validates :name, presence: true
   validates :birthday, presence: true
+  has_many :articles
+  has_many :comments, :through => :articles
 end
