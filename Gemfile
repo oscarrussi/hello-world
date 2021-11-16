@@ -36,6 +36,8 @@ gem 'faker'
 
 gem 'pagy'
 
+gem "rolify" x
+
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.4.4', require: false
 

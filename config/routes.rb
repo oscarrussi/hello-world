@@ -12,10 +12,12 @@ Rails.application.routes.draw do
     # devise_for :users
     resources :categories, only: [:index]
     resources :login, only: [:create]
-    resources :users, only: [:create]
+    resources :users, only: [:create] do
+      put "roles/update_many", to: "users/roles#update_many"
+    end
     resources :articles, only: [:show] do
-    resources :comments, only: [:index], controller: "articles/comments"
-  end
+      resources :comments, only: [:index], controller: "articles/comments"
+    end
     put "categories/update_many", to: "categories#update_many"
   end
 end

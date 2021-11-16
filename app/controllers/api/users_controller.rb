@@ -1,5 +1,6 @@
 module Api
   class UsersController < ApiController
+
     def create
       user = User.new(user_params)
       if user.valid?
