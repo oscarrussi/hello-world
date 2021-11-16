@@ -137,6 +137,8 @@ GEM
     pg (1.2.3-x64-mingw32)
     puma (5.5.2)
       nio4r (~> 2.0)
+    pundit (2.1.1)
+      activesupport (>= 3.0.0)
     racc (1.6.0)
     rack (2.2.3)
     rack-test (1.1.0)
@@ -216,6 +218,7 @@ DEPENDENCIES
   pagy
   pg
   puma (~> 5.0)
+  pundit
   rails (~> 6.1.4, >= 6.1.4.1)
   rolify
   sidekiq

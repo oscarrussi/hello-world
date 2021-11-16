@@ -1,8 +1,18 @@
 module Api
   class ApiController < ActionController::API
     include Pagy::Backend
+    include Pundit
+    rescue_from Pundit::NotAuthorizedError, with: :forbidden
 
     private
+
+    def forbidden
+      render json: {error: "you are not allowed to do this action"}, status: :forbidden
+    end
+
+    def current_user
+      @current_user
+    end
 
     def authenticate_user
       decoded_token = JWT.decode(request.headers['Authorization'], Rails.application.credentials[:secret_token], false,

@@ -15,7 +15,7 @@ Rails.application.routes.draw do
     resources :users, only: [:create] do
       put "roles/update_many", to: "users/roles#update_many"
     end
-    resources :articles, only: [:show] do
+    resources :articles, only: [:show, :create] do
       resources :comments, only: [:index], controller: "articles/comments"
     end
     put "categories/update_many", to: "categories#update_many"
