@@ -10,16 +10,17 @@ Rails.application.routes.draw do
  
   namespace :api do
     # devise_for :users
+    put "articles/update_aasm", to: "articles#update_aasm"
+    put "categories/update_many", to: "categories#update_many"
+    get "comments/get_deleted", to: "comments#get_deleted"
     resources :categories, only: [:index]
     resources :login, only: [:create]
     resources :comments, only: [:destroy]
-    get "comments/get_deleted", to: "comments#get_deleted"
     resources :users, only: [:create] do
       put "roles/update_many", to: "users/roles#update_many"
     end
-    resources :articles, only: [:show, :create] do
+    resources :articles, only: [:index, :show, :create] do
       resources :comments, only: [:index], controller: "articles/comments"
     end
-    put "categories/update_many", to: "categories#update_many"
   end
 end

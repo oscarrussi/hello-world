@@ -23,10 +23,12 @@ module Api
       render json: { "error": e }, status: :unauthorized
     end
 
+    def is_admin
+      authorize :admin, :admin?
+    end
+  
     def is_super_admin
-      unless @current_user.has_role? :super_admin
-        head :forbidden
-      end
+      authorize :admin, :super_admin?
     end
   end
 end
