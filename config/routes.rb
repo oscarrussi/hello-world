@@ -13,10 +13,11 @@ Rails.application.routes.draw do
     put "articles/update_aasm", to: "articles#update_aasm"
     put "categories/update_many", to: "categories#update_many"
     get "comments/get_deleted", to: "comments#get_deleted"
+    get "users/previous_versions/:id", to: "users#previous_versions"
     resources :categories, only: [:index]
     resources :login, only: [:create]
     resources :comments, only: [:destroy]
-    resources :users, only: [:create] do
+    resources :users, only: [:create, :update] do
       put "roles/update_many", to: "users/roles#update_many"
     end
     resources :articles, only: [:index, :show, :create] do
