@@ -40,6 +40,8 @@ gem "rolify"
 
 gem "pundit"
 
+gem 'acts_as_paranoid'
+
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.4.4', require: false
 

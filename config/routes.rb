@@ -12,6 +12,8 @@ Rails.application.routes.draw do
     # devise_for :users
     resources :categories, only: [:index]
     resources :login, only: [:create]
+    resources :comments, only: [:destroy]
+    get "comments/get_deleted", to: "comments#get_deleted"
     resources :users, only: [:create] do
       put "roles/update_many", to: "users/roles#update_many"
     end
