@@ -128,6 +128,7 @@ GEM
       ruby-vips (>= 2.0.17, < 3)
     jmespath (1.4.0)
     jsonapi-renderer (0.2.2)
+    jsonapi_errors_handler (0.4.0)
     jwt (2.3.0)
     loofah (2.12.0)
       crass (~> 1.0.2)
@@ -235,6 +236,7 @@ DEPENDENCIES
   devise
   faker
   image_processing (~> 1.2)
+  jsonapi_errors_handler
   jwt
   pagy
   paper_trail

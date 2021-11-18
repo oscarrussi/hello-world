@@ -2,12 +2,27 @@ module Api
   class ApiController < ActionController::API
     include Pagy::Backend
     include Pundit
-    rescue_from Pundit::NotAuthorizedError, with: :forbidden
+    include JsonapiErrorsHandler
+    rescue_from ::StandardError, with: lambda { |e| handle_error(e, :internal_server_error) }
+    
+    rescue_from Pundit::NotAuthorizedError, with: Add this in the application controller to catch all errors of type <error_type> and manage the error using the method <method>. For example:
+    rescue_from ActiveRecord::RecordNotFound, with: :not_found_error
+    
+    def not_found_error(exception, status)
+          render json: {error: exception.message}, status: :not_found
+    end
+    rescue_from ActiveRecord::RecordNotFound, with: lambda { |e| handle_error(e, :not_found) }
+    rescue_from ActiveRecord::RecordInvalid, with: lambda { |e| handle_error(e, :unprocessable_entity) }
+    rescue_from Pagy::OverflowError, with: lambda { |e| handle_error(e, :bad_request) }
+
+    JsonapiErrorsHandler.configure do |config|
+      config.handle_unexpected = true
+    end
 
     private
 
-    def forbidden
-      render json: {error: "you are not allowed to do this action"}, status: :forbidden
+    def handle_error(exception, status)
+      render json: {error: exception.message}, status: status
     end
 
     def current_user

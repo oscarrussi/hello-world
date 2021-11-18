@@ -6,22 +6,14 @@ module Api
 
     def create
       user = User.new(user_params)
-      if user.valid?
-        user.save
-        authorization = JWT.encode({ id: user.id }, Rails.application.credentials[:secret_token], 'HS256')
-        render json: { "Authorization": authorization, "user": user }, status: :accepted
-      else
-        render json: { "errors": user.errors.messages }, status: :unprocessable_entity
-      end
+      user.save!
+      authorization = JWT.encode({ id: user.id }, Rails.application.credentials[:secret_token], 'HS256')
+      render json: { "Authorization": authorization, "user": user }, status: :accepted
     end
 
     def update
-      @user.update(user_params)
-      if @user.save
-        render json: @user, status: :accepted
-      else
-        render json: @user.errors.messages, status: :unprocessable_entity
-      end
+      @user.update!(user_params)
+      render json: @user, status: :accepted
     end
 
     def previous_versions
