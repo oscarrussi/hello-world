@@ -5,7 +5,7 @@ module Api
 
     def index
       @pagy, @comments = pagy(@article.comments, page: params[:page])
-      render json: { "pagy": @pagy, "comments": @comments }
+      render json: { "pagy": @pagy, "comments": serialize_collection(@comments) }
     end
 
     private

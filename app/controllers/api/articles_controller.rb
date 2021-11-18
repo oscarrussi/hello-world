@@ -5,10 +5,8 @@ module Api
     before_action :set_article, only: %i[show]
 
     def index
-      @articles = Article.pending_or_reviewing.map{|article| {article: article, 
-        available_transitions: article.aasm.permitted_transitions
-        .map{|s| {event: s[:event], state: s[:state]}}}}
-      render json: @articles
+      @articles = Article.pending_or_reviewing
+      render json: @articles, each_serializer: ArticleSerializer
     end
 
     def show

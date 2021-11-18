@@ -9,6 +9,11 @@ class Article < ApplicationRecord
   validates :aasm_state, presence: true
   scope :pending_or_reviewing, -> { where("aasm_state = 'pending' or aasm_state='reviewing'") }
 
+  def available_transitions
+    self.aasm.permitted_transitions
+        .map{|s| {event: s[:event], state: s[:state]}}
+  end
+
   aasm do # default column: aasm_state
     state :pending, initial: true
     state :reviewing

@@ -30,5 +30,13 @@ module Api
     def is_super_admin
       authorize :admin, :super_admin?
     end
+
+    def serialize_collection(models)
+      models.map { |model| ActiveModelSerializers::SerializableResource.new(model) }
+    end
+
+    def serialize_model(model)
+      ActiveModelSerializers::SerializableResource.new(model)
+    end
   end
 end
