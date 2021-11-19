@@ -8,7 +8,7 @@
               password: pass, password_confirmation: pass)
 end
 # create categories
-50.times{Category.create(name: Faker::Hobby.unique.activity)}
+50.times{Category.create(name: Faker::Hobby.unique.activity, cod: Faker::Alphanumeric.unique.alphanumeric(number: 3))}
 # create articles
 User.all.each do |user| 
   (5..10).to_a.sample.times do

@@ -7,6 +7,8 @@ class Article < ApplicationRecord
   has_many :article_categories
   has_many :categories, :through => :article_categories
   validates :aasm_state, presence: true
+  validates :title, presence: true
+  validates :content, presence: true
   scope :pending_or_reviewing, -> { where("aasm_state = 'pending' or aasm_state='reviewing'") }
 
   def available_transitions
