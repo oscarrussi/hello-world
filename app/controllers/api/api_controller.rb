@@ -17,7 +17,7 @@ module Api
     private
 
     def handle_error(exception, status)
-      render json: { error: exception.message }, status: status
+      render json: { errors: exception.message }, status: status
     end
 
     def forbidden

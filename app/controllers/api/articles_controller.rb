@@ -1,7 +1,7 @@
 module Api
   class ArticlesController < ApiController
     before_action :authenticate_user
-    before_action :is_admin
+    before_action :is_admin, only: %i[index]
     before_action :set_article, only: %i[show]
 
     def index

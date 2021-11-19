@@ -5,7 +5,7 @@ module Api
     before_action :authenticate_user
 
     def index
-      head :ok
+      render json: Category.all
     end
 
     def update_many
