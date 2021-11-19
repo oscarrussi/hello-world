@@ -4,13 +4,8 @@ module Api
     include Pundit
     include JsonapiErrorsHandler
     rescue_from ::StandardError, with: lambda { |e| handle_error(e, :internal_server_error) }
-    
-    rescue_from Pundit::NotAuthorizedError, with: Add this in the application controller to catch all errors of type <error_type> and manage the error using the method <method>. For example:
-    rescue_from ActiveRecord::RecordNotFound, with: :not_found_error
-    
-    def not_found_error(exception, status)
-          render json: {error: exception.message}, status: :not_found
-    end
+
+    rescue_from Pundit::NotAuthorizedError, with: :forbidden
     rescue_from ActiveRecord::RecordNotFound, with: lambda { |e| handle_error(e, :not_found) }
     rescue_from ActiveRecord::RecordInvalid, with: lambda { |e| handle_error(e, :unprocessable_entity) }
     rescue_from Pagy::OverflowError, with: lambda { |e| handle_error(e, :bad_request) }
@@ -22,7 +17,11 @@ module Api
     private
 
     def handle_error(exception, status)
-      render json: {error: exception.message}, status: status
+      render json: { error: exception.message }, status: status
+    end
+
+    def forbidden
+      render json: { error: "you are not allowed to do this action" }, status: :forbidden
     end
 
     def current_user
@@ -30,9 +29,9 @@ module Api
     end
 
     def authenticate_user
-      decoded_token = JWT.decode(request.headers['Authorization'], Rails.application.credentials[:secret_token], false,
-                                 { algorithm: 'HS256' })
-      @current_user = User.find(decoded_token[0]['id'])
+      decoded_token = JWT.decode(request.headers["Authorization"], Rails.application.credentials[:secret_token], false,
+                                 { algorithm: "HS256" })
+      @current_user = User.find(decoded_token[0]["id"])
       head :unauthorized unless @current_user
     rescue StandardError => e
       render json: { "error": e }, status: :unauthorized
@@ -41,7 +40,7 @@ module Api
     def is_admin
       authorize :admin, :admin?
     end
-  
+
     def is_super_admin
       authorize :admin, :super_admin?
     end
