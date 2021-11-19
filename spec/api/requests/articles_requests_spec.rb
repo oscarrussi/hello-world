@@ -4,6 +4,8 @@ require_relative 'context_api_login'
 RSpec.describe 'Api::ArticlesController', type: :request do
   include_context 'api login'
   before { 29.times{FactoryBot.create(:article)} }
+  let!(:article_){FactoryBot.build(:article)}
+  let!(:articles_params) {{ article: {title: article_.title, content: article_.content }}}
   let!(:article){FactoryBot.create(:article)}
 
   describe 'index' do
@@ -48,8 +50,6 @@ RSpec.describe 'Api::ArticlesController', type: :request do
   end
 
   describe 'create' do
-    let!(:article_){FactoryBot.build(:article)}
-    let!(:articles_params) {{ article: {title: article_.title, content: article_.content }}}
     context 'when wrong authorization is provided' do
       before { post articles_route, params: articles_params, headers: { authorization: '' } }
       it { expect(response).to have_http_status(:unauthorized) }
@@ -59,6 +59,32 @@ RSpec.describe 'Api::ArticlesController', type: :request do
       before {post articles_route, params: articles_params, headers: { authorization: @authorization } }
       it { expect(response).to have_http_status(:accepted) }
       it { expect(hash_body.to_json).to eq serialize_model(Article.find(hash_body["id"])) }
+    end
+
+    context "when params don't include title" do
+      before do
+        articles_params[:article].delete(:title)
+        post articles_route, params: articles_params, headers: { authorization: @authorization }
+      end
+      it { expect(response).to have_http_status(:unprocessable_entity) }
+      it { expect(hash_body["errors"]).to eq "Validation failed: Title can't be blank" }
+    end
+
+    context "when params don't include content" do
+      before do
+        articles_params[:article].delete(:content)
+        post articles_route, params: articles_params, headers: { authorization: @authorization }
+      end
+      it { expect(response).to have_http_status(:unprocessable_entity) }
+      it { expect(hash_body["errors"]).to eq "Validation failed: Content can't be blank" }
+    end
+
+    context 'when user is not super_admin' do
+      before do
+        @user.roles=[]
+        post articles_route, params: articles_params, headers: { authorization: @authorization }
+      end
+      it { expect(response).to have_http_status(:forbidden) }
     end
   end
 end

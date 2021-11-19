@@ -17,9 +17,8 @@ module Api
     def create
       @article = @current_user.articles.new(articles_params)
       authorize  @article
-      if @article.save
-        render json: @article, status: :accepted
-      end
+      @article.save!
+      render json: @article, status: :accepted
     end
 
     def update_aasm
