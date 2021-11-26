@@ -4,7 +4,7 @@ module Api
     before_action :set_article, only: %i[index]
 
     def index
-      @pagy, @comments = pagy(@article.comments, page: params[:page])
+      @pagy, @comments = pagy(@article.comments_with_user_email, page: params[:page])
       render json: { "pagy": @pagy, "comments": serialize_collection(@comments) }
     end
 

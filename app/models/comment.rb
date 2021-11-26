@@ -6,7 +6,7 @@ class Comment < ApplicationRecord
   belongs_to :user
   belongs_to :article
 
-  def user_email
-    user.email
+  def self.only_deleted_with_user_email
+    self.only_deleted.joins(:user).select('comments.id, comments.message, comments.article_id, users.email as user_email')
   end
 end

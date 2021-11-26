@@ -10,7 +10,7 @@ module Api
 
     def get_deleted
       authorize Comment
-      render json: Comment.only_deleted
+      render json: Comment.only_deleted_with_user_email
     end
   end
 end

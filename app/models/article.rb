@@ -11,6 +11,10 @@ class Article < ApplicationRecord
   validates :content, presence: true
   scope :pending_or_reviewing, -> { where("aasm_state = 'pending' or aasm_state='reviewing'") }
 
+  def comments_with_user_email
+    Comment.joins(:user).select('comments.id, comments.message, comments.article_id, users.email as user_email').where(article_id: id)
+  end
+
   def available_transitions
     self.aasm.permitted_transitions
         .map{|s| {event: s[:event], state: s[:state]}}

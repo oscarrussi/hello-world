@@ -19,7 +19,7 @@ RSpec.describe 'Api::Articles::CommentsController', type: :request do
       it { expect(hash_body['pagy']['page']).to eq 1 }
       it { expect(hash_body['pagy']['pages']).to eq 3 }
       it { expect(hash_body['comments'].size).to eq 5 }
-      it { expect(hash_body['comments'][4].to_json).to eq serialize_model(Comment.where(article_id: article.id)[4]) }
+      it { expect(hash_body['comments'][4].to_json).to eq serialize_model(Article.find(article.id).comments_with_user_email[4]) }
       it { expect(hash_body['comments'].none? { |comment_| comment_['id'].to_i == Comment.where(article_id: article.id)[5].id }).to be_truthy }
     end
   end
