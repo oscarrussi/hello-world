@@ -21,7 +21,7 @@ RSpec.describe 'Api::ArticlesController', type: :request do
 
   describe 'create' do
     context 'when wrong authorization is provided' do
-      before { post categories_route, headers: { authorization: '' } }
+      before { get categories_route, headers: { authorization: '' } }
       it { expect(response).to have_http_status(:unauthorized) }
     end
 
