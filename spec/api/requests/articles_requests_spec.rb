@@ -3,10 +3,10 @@ require_relative 'context_api_login'
 
 RSpec.describe 'Api::ArticlesController', type: :request do
   include_context 'api login'
-  before { 29.times{FactoryBot.create(:article)} }
-  let!(:article_){FactoryBot.build(:article)}
-  let!(:articles_params) {{ article: {title: article_.title, content: article_.content }}}
-  let!(:article){FactoryBot.create(:article)}
+  before { 29.times { FactoryBot.create(:article) } }
+  let!(:article_) { FactoryBot.build(:article) }
+  let!(:articles_params) { { article: { title: article_.title, content: article_.content } } }
+  let!(:article) { FactoryBot.create(:article) }
 
   describe 'index' do
     context 'when wrong authorization is provided' do
@@ -15,7 +15,7 @@ RSpec.describe 'Api::ArticlesController', type: :request do
     end
 
     context 'when authorization is provided' do
-      before {get articles_route, headers: { authorization: @authorization } }
+      before { get articles_route, headers: { authorization: @authorization } }
       it { expect(response).to have_http_status(:ok) }
       it { expect(hash_body.size).to eq 30 }
       # it { expect(hash_body['pagy']['count']).to eq 27 }
@@ -29,7 +29,7 @@ RSpec.describe 'Api::ArticlesController', type: :request do
     end
     context 'when user is not super_admin' do
       before do
-        @user.roles=[]
+        @user.roles = []
         get articles_route, headers: { authorization: @authorization }
       end
       it { expect(response).to have_http_status(:forbidden) }
@@ -38,12 +38,12 @@ RSpec.describe 'Api::ArticlesController', type: :request do
 
   describe 'show' do
     context 'when wrong authorization is provided' do
-      before { get articles_route+article.id.to_s, headers: { authorization: '' } }
+      before { get articles_route + article.id.to_s, headers: { authorization: '' } }
       it { expect(response).to have_http_status(:unauthorized) }
     end
 
     context 'when authorization is provided' do
-      before {get articles_route+article.id.to_s, headers: { authorization: @authorization } }
+      before { get articles_route + article.id.to_s, headers: { authorization: @authorization } }
       it { expect(response).to have_http_status(:ok) }
       it { expect(hash_body.to_json).to eq serialize_model(article) }
     end
@@ -56,9 +56,9 @@ RSpec.describe 'Api::ArticlesController', type: :request do
     end
 
     context 'when authorization is provided' do
-      before {post articles_route, params: articles_params, headers: { authorization: @authorization } }
+      before { post articles_route, params: articles_params, headers: { authorization: @authorization } }
       it { expect(response).to have_http_status(:accepted) }
-      it { expect(hash_body.to_json).to eq serialize_model(Article.find(hash_body["id"])) }
+      it { expect(hash_body.to_json).to eq serialize_model(Article.find(hash_body['id'])) }
     end
 
     context "when params don't include title" do
@@ -67,7 +67,7 @@ RSpec.describe 'Api::ArticlesController', type: :request do
         post articles_route, params: articles_params, headers: { authorization: @authorization }
       end
       it { expect(response).to have_http_status(:unprocessable_entity) }
-      it { expect(hash_body["errors"]).to eq "Validation failed: Title can't be blank" }
+      it { expect(hash_body['errors']).to eq "Validation failed: Title can't be blank" }
     end
 
     context "when params don't include content" do
@@ -76,12 +76,12 @@ RSpec.describe 'Api::ArticlesController', type: :request do
         post articles_route, params: articles_params, headers: { authorization: @authorization }
       end
       it { expect(response).to have_http_status(:unprocessable_entity) }
-      it { expect(hash_body["errors"]).to eq "Validation failed: Content can't be blank" }
+      it { expect(hash_body['errors']).to eq "Validation failed: Content can't be blank" }
     end
 
     context 'when user is not super_admin' do
       before do
-        @user.roles=[]
+        @user.roles = []
         post articles_route, params: articles_params, headers: { authorization: @authorization }
       end
       it { expect(response).to have_http_status(:forbidden) }

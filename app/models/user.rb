@@ -11,5 +11,5 @@ class User < ApplicationRecord
   validates :name, presence: true
   validates :birthday, presence: true
   has_many :articles
-  has_many :comments, :through => :articles
+  has_many :comments, through: :articles
 end

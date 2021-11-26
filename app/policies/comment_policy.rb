@@ -3,7 +3,7 @@ class CommentPolicy < ApplicationPolicy
     user.has_any_role?(:super_admin, :content_manager)
   end
 
-  def get_deleted?
+  def all_deleted?
     user.has_any_role?(:super_admin, :content_manager)
   end
 end

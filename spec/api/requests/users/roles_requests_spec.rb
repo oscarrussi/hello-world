@@ -12,20 +12,26 @@ RSpec.describe 'Api::Users::RolesController', type: :request do
     end
 
     context 'when non existent user' do
-      before { put user_roles_route(User.all.pluck(:id).max+1), headers: { authorization: @authorization } }
+      before { put user_roles_route(User.all.pluck(:id).max + 1), headers: { authorization: @authorization } }
       it { expect(response).to have_http_status(:not_found) }
     end
 
     context 'when invalid role is provided' do
-      before { put user_roles_route(user_.id), params: {roles: ["soccer_player", "content_manager"]}, headers: { authorization: @authorization } }
+      before do
+        put user_roles_route(user_.id), params: { roles: %w[soccer_player content_manager] },
+                                        headers: { authorization: @authorization }
+      end
       it { expect(response).to have_http_status(:unprocessable_entity) }
-      it { expect(user_.roles.pluck(:name).sort.join(",")).to_not eq("content_manager,soccer_player") }
+      it { expect(user_.roles.pluck(:name).sort.join(',')).to_not eq('content_manager,soccer_player') }
     end
 
     context 'when valid roles are provided' do
-      before { put user_roles_route(user_.id), params: {roles: ["super_admin", "content_manager"]}, headers: { authorization: @authorization } }
+      before do
+        put user_roles_route(user_.id), params: { roles: %w[super_admin content_manager] },
+                                        headers: { authorization: @authorization }
+      end
       it { expect(response).to have_http_status(:accepted) }
-      it { expect(user_.roles.pluck(:name).sort.join(",")).to eq("content_manager,super_admin") }
+      it { expect(user_.roles.pluck(:name).sort.join(',')).to eq('content_manager,super_admin') }
     end
   end
 end

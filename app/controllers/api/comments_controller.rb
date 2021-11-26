@@ -5,10 +5,10 @@ module Api
     def destroy
       authorize Comment
       Comment.destroy(params[:id])
-      render json: {"id": params[:id]}, status: :ok
+      render json: { "id": params[:id] }, status: :ok
     end
 
-    def get_deleted
+    def all_deleted
       authorize Comment
       render json: Comment.only_deleted_with_user_email
     end

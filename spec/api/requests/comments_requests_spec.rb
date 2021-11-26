@@ -14,7 +14,7 @@ RSpec.describe 'Api::CommentsController', type: :request do
     end
 
     context 'when nonexistent comment is requested' do
-      before { delete "#{comments_route}#{Comment.last.id+1}", headers: { authorization: @authorization } }
+      before { delete "#{comments_route}#{Comment.last.id + 1}", headers: { authorization: @authorization } }
       it { expect(hash_body['errors']).to match(/^Couldn't find Comment/) }
       it { expect(response).to have_http_status(:not_found) }
     end
@@ -27,30 +27,30 @@ RSpec.describe 'Api::CommentsController', type: :request do
 
     context 'when logged user is not admin' do
       before do
-        @user.roles=[]
+        @user.roles = []
         delete comments_route + non_user_comment.id.to_s, headers: { authorization: @authorization }
       end
       it { expect(response).to have_http_status(:forbidden) }
     end
   end
 
-  describe 'get_deleted' do
+  describe 'all_deleted' do
     context 'when wrong authorization is provided' do
-      before { get comments_route + "get_deleted", headers: { authorization: '' } }
+      before { get "#{comments_route}all_deleted", headers: { authorization: '' } }
       it { expect(response).to have_http_status(:unauthorized) }
     end
 
     context 'when no deleted comments' do
-      before { get comments_route + "get_deleted", headers: { authorization: @authorization } }
+      before { get "#{comments_route}all_deleted", headers: { authorization: @authorization } }
       it { expect(hash_body.size).to eq 0 }
       it { expect(response).to have_http_status(:ok) }
     end
 
     context 'when there are comment deleted' do
-      before do 
-        30.times{FactoryBot.create(:comment)}
-        5.times{Comment.last.destroy}
-        get comments_route + "get_deleted", headers: { authorization: @authorization }
+      before do
+        30.times { FactoryBot.create(:comment) }
+        5.times { Comment.last.destroy }
+        get "#{comments_route}all_deleted", headers: { authorization: @authorization }
       end
       it { expect(hash_body.size).to eq 5 }
       it { expect(response).to have_http_status(:ok) }
@@ -58,8 +58,8 @@ RSpec.describe 'Api::CommentsController', type: :request do
 
     context 'when logged user is not admin' do
       before do
-        @user.roles=[]
-        delete comments_route + "get_deleted", headers: { authorization: @authorization }
+        @user.roles = []
+        delete "#{comments_route}all_deleted", headers: { authorization: @authorization }
       end
       it { expect(response).to have_http_status(:forbidden) }
     end

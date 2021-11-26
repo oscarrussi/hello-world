@@ -22,7 +22,7 @@ RSpec.describe 'Api::UsersController', type: :request do
       end
       it { expect(response).to have_http_status(:unprocessable_entity) }
       it do
-        expected_json = "Validation failed: Email is invalid"
+        expected_json = 'Validation failed: Email is invalid'
         expect(hash_body['errors']).to eq(expected_json)
       end
     end
@@ -102,7 +102,7 @@ RSpec.describe 'Api::UsersController', type: :request do
       end
       it { expect(response).to have_http_status(:unprocessable_entity) }
       it do
-        expected_json = "Validation failed: Password is too short (minimum is 6 characters)"
+        expected_json = 'Validation failed: Password is too short (minimum is 6 characters)'
         expect(hash_body['errors']).to eq(expected_json)
       end
     end

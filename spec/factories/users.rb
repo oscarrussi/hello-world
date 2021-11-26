@@ -4,7 +4,7 @@ FactoryBot.define do
   factory :user do
     name { Faker::Name.name }
     email { Faker::Internet.unique.email }
-    birthday {Faker::Date.between(from: '1000-01-01', to: '2021-09-23')}
+    birthday { Faker::Date.between(from: '1000-01-01', to: '2021-09-23') }
     password { pass }
     password_confirmation { pass }
   end

@@ -9,14 +9,14 @@ module Api
     end
 
     def update_many
-          uploaded_io = params[:file]
-        if File.extname(uploaded_io) == '.csv'
-          SaveCsv.call(uploaded_io)
-          LoadCategoriesJob.perform_later
-          head :ok
-        else
-          render json: {"error": "Only valid format is csv"}, status: :unprocessable_entity
-        end
+      uploaded_io = params[:file]
+      if File.extname(uploaded_io) == '.csv'
+        SaveCsv.call(uploaded_io)
+        LoadCategoriesJob.perform_later
+        head :ok
+      else
+        render json: { "error": 'Only valid format is csv' }, status: :unprocessable_entity
+      end
     end
   end
 end

@@ -14,9 +14,9 @@ RSpec.describe Comment, type: :model do
   end
 
   describe 'scope' do
-    before{subject.destroy}
-    it do 
-      user_email = Comment.only_deleted_with_user_email[0]["user_email"] 
+    before { subject.destroy }
+    it do
+      user_email = Comment.only_deleted_with_user_email[0]['user_email']
       expect(user_email).to eq(user.email)
     end
   end

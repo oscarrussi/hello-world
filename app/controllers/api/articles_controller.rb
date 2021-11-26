@@ -1,7 +1,7 @@
 module Api
   class ArticlesController < ApiController
     before_action :authenticate_user
-    before_action :is_admin, only: %i[index]
+    before_action :admin?, only: %i[index]
     before_action :set_article, only: %i[show]
 
     def index
@@ -13,10 +13,9 @@ module Api
       render json: @article
     end
 
-
     def create
       @article = @current_user.articles.new(articles_params)
-      authorize  @article
+      authorize @article
       @article.save!
       render json: @article, status: :accepted
     end

@@ -7,12 +7,12 @@ Rails.application.routes.draw do
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 
   mount Sidekiq::Web => "/sidekiq"
- 
+
   namespace :api do
     # devise_for :users
     put "articles/update_aasm", to: "articles#update_aasm"
     put "categories/update_many", to: "categories#update_many"
-    get "comments/get_deleted", to: "comments#get_deleted"
+    get "comments/all_deleted", to: "comments#all_deleted"
     get "users/previous_versions/:id", to: "users#previous_versions"
     resources :categories, only: [:index]
     resources :login, only: [:create]
