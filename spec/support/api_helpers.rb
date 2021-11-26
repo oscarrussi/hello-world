@@ -25,8 +25,8 @@ module ApiHelpers
     "#{ROUTE_PATH}articles/#{id}/comments"
   end
 
-  def user_roless_route(id)
-    "#{ROUTE_PATH}user/#{id}/roles"
+  def user_roles_route(id)
+    "#{ROUTE_PATH}users/#{id}/roles/update_many"
   end
 
   def hash_body
