@@ -155,6 +155,32 @@ paths:
           description: "invalid params"
           schema:
             $ref: "#/definitions/response_errors"
+  /login:
+    post:
+      tags:
+        - "login"
+      summary: "generate an Authentication token to login"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: body
+          description: "contains the properties of a user"
+          type: "object"
+          required: true
+          schema:
+            $ref: "#/definitions/login_create"
+      responses:
+        "Ok":
+          description: "Valid params for user model"
+          schema:
+            $ref: "#/definitions/response_login"
+        "unprocessable entity":
+          description: "invalid params"
+          schema:
+            $ref: "#/definitions/response_errors"
 definitions:
   response_errors:
     type: "object"
@@ -257,3 +283,22 @@ definitions:
         example:
         - "super_admin"
         - "content_manager"
+  login_create:
+    properties:
+      email:
+        type: "string"
+        example: email2@email.com
+        description: user email
+        required: true
+      password:
+        type: "string"
+        example: "123456"
+        description: user password
+        required: true
+  response_login:
+    type: "object"
+    properties:
+      Authorization:
+        type: "string"
+        example: eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MTd9.FvSlMW56QXTRRsY_EGx-FFg6RVGt-UI_io-koqZs-OY
+        description: Authorization token to add in the headers to authenticate
