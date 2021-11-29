@@ -115,7 +115,55 @@ paths:
           description: "invalid params"
           schema:
             $ref: "#/definitions/response_errors"
+  /users/{id}/roles/update_many:
+    put:
+      tags:
+        - "users"
+      summary: "update roles from requested user. User updatting should have super_admin role"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "path"
+          name: "id"
+          description: "ID of the user to update its roles"
+          required: true
+          type: "integer"
+          example: 1
+        - in: "header"
+          name: Authorization
+          type: "string"
+          description: Authorization token to get authorization to use this endpoint
+          required: true
+          example: "eyJhbGciOiJIUzI1NiJ9.eyJpZCI6Mn0.hBwXV_xQ2WctBK64_IeJMY0rzqmLIbzZAhS0HuoHtI8"
+        - in: "body"
+          name: body
+          description: "list of roles to assign to this user"
+          type: "object"
+          required: true
+          schema:
+            $ref: "#/definitions/users_roles_update"
+      responses:
+        "Accepted":
+          description: "Valid roles, user id and Authorization token"
+        "Forbidden":
+          description: "Current user is not super_admin, so it is forbidden to do this action"
+        "Unauthorized":
+          description: "invalid Authorization token"
+        "unprocessable entity":
+          description: "invalid params"
+          schema:
+            $ref: "#/definitions/response_errors"
 definitions:
+  response_errors:
+    type: "object"
+    show: include errors message
+    properties:
+      errors:
+        type: array
+        example:
+          - "error message"
   users_create:
     properties:
       email:
@@ -200,11 +248,12 @@ definitions:
         name: andres
         email: andres@andres.com
         birthday: 06/06/1991
-  response_errors:
-    type: "object"
-    show: include errors message
+  users_roles_update:
     properties:
-      errors:
+      roles:
+        description: list of valid roles
+        description: list of the next roles to assign the user, remove all other role from this user
         type: array
         example:
-          - "error message"
+        - "super_admin"
+        - "content_manager"
