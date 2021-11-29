@@ -241,6 +241,29 @@ paths:
           description: "Current user is not super admin or content manager, so it is forbidden to do this action"
         "Unauthorized":
           description: "invalid Authorization token"
+  /categories:
+    get:
+      tags:
+        - "categories"
+      summary: "get all categories"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "header"
+          name: Authorization
+          type: "string"
+          description: Authorization token to get authorization to use this endpoint
+          required: true
+          example: "eyJhbGciOiJIUzI1NiJ9.eyJpZCI6Mn0.hBwXV_xQ2WctBK64_IeJMY0rzqmLIbzZAhS0HuoHtI8"
+      responses:
+        "Accepted":
+          description: "valid authorization token"
+          schema:
+            $ref: "#/definitions/response_get_categories"
+        "Unauthorized":
+          description: "invalid Authorization token"
 definitions:
   response_errors:
     type: "object"
@@ -381,4 +404,14 @@ definitions:
         message: message2
         user_email: email2@email.com
         article_id: 2
+  response_get_categories:
+    description: list of categories
+    type: array
+    example:
+      - id: 1
+        name: name1
+        cod: cod1
+      - id: 2
+        name: name2
+        cod: cod2
         
