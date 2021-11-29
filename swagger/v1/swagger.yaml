@@ -1,0 +1,167 @@
+swagger: "2.0"
+info:
+  title: blog API, developed by Oscar Andrés Russi Porras
+  description: this API contains endpoints to CRUD
+  version: 1.0.0
+basePath: /api
+servers:
+  - url: http://localhost:3000/api/
+tags:
+  - name: articles
+    description: articles of the blog
+  - name: categories
+    description: categories of the article, each article can have many categories
+  - name: comments
+    description: comments made by users on each article
+  - name: login
+    description: so users can authenticate and get authorization to use the endpoints
+  - name: request books
+    description: requests users have make over the books from the bookstore
+  - name: users
+    description: register users that can use the endpoints
+paths:
+  /users:
+    post:
+      tags:
+        - "users"
+      summary: "create users that can authenticate to use the endpoints of the API"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: body
+          description: "contains the properties of a user"
+          type: "object"
+          required: true
+          schema:
+            $ref: "#/definitions/users_create"
+      responses:
+        "Ok":
+          description: "Valid params for user model"
+          schema:
+            $ref: "#/definitions/response_users"
+        "unprocessable entity":
+          description: "invalid params"
+          schema:
+            $ref: "#/definitions/response_errors"
+  /users/{id}:
+    put:
+      tags:
+        - "users"
+      summary: "update users, user can only edit itself or it can edit others if it has a super_user role"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "path"
+          name: "id"
+          description: "ID of the author"
+          required: true
+          type: "integer"
+          example: 1
+        - in: "header"
+          name: Authorization
+          type: "string"
+          description: Authorization token to get authorization to use this endpoint
+          required: true
+          example: "eyJhbGciOiJIUzI1NiJ9.eyJpZCI6Mn0.hBwXV_xQ2WctBK64_IeJMY0rzqmLIbzZAhS0HuoHtI8"
+        - in: "body"
+          name: body
+          description: "contains the properties of a user"
+          type: "object"
+          required: true
+          schema:
+            $ref: "#/definitions/users_create"
+      responses:
+        "Accepted":
+          description: "Valid params for user model"
+          schema:
+            $ref: "#/definitions/response_put_users"
+        "unprocessable entity":
+          description: "invalid params"
+          schema:
+            $ref: "#/definitions/response_errors"
+definitions:
+  users_create:
+    properties:
+      email:
+        type: "string"
+        example: email@email.com
+        description: user email
+        required: true
+      name:
+        type: "string"
+        example: oscar
+        description: user first name
+        required: true
+      birthday:
+        type: "string"
+        example: 23/06/1991
+        description: user birth date
+        required: false
+      password:
+        type: "string"
+        example: "123456"
+        description: user password
+        required: true
+      password_confirmation:
+        type: "string"
+        example: "123456"
+        description: it should be equal to user password
+        required: true
+  response_users:
+    type: "object"
+    properties:
+      Authorization:
+        type: "string"
+        example: eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MTd9.FvSlMW56QXTRRsY_EGx-FFg6RVGt-UI_io-koqZs-OY
+        description: Authorization token to add in the headers to authenticate
+      user:
+        type: object
+        properties:
+          id:
+            type: "integer"
+            example: 1
+            description: primary key of the created user
+          email:
+            type: "string"
+            example: email@email.com
+            description: user email
+          name:
+            type: "string"
+            example: oscar
+            description: user name
+          birthday:
+            type: "string"
+            example: 23/06/1991
+            description: user birth date
+  response_put_users:
+    type: object
+    properties:
+      id:
+        type: "integer"
+        example: 1
+        description: primary key of the created user
+      email:
+        type: "string"
+        example: email@email.com
+        description: user email
+      name:
+        type: "string"
+        example: oscar
+        description: user name
+      birthday:
+        type: "string"
+        example: 23/06/1991
+        description: user birth date
+  response_errors:
+    type: "object"
+    show: include errors message
+    properties:
+      errors:
+        type: array
+        example:
+          - "error message"

@@ -82,6 +82,8 @@ GEM
     acts_as_paranoid (0.7.3)
       activerecord (>= 5.2, < 7.0)
       activesupport (>= 5.2, < 7.0)
+    addressable (2.8.0)
+      public_suffix (>= 2.0.2, < 5.0)
     ast (2.4.2)
     aws-eventstream (1.2.0)
     aws-partitions (1.516.0)
@@ -137,6 +139,8 @@ GEM
       mini_magick (>= 4.9.5, < 5)
       ruby-vips (>= 2.0.17, < 3)
     jmespath (1.4.0)
+    json-schema (2.8.1)
+      addressable (>= 2.4)
     jsonapi-renderer (0.2.2)
     jsonapi_errors_handler (0.4.0)
     jwt (2.3.0)
@@ -165,6 +169,7 @@ GEM
     parser (3.0.3.0)
       ast (~> 2.4.1)
     pg (1.2.3-x64-mingw32)
+    public_suffix (4.0.6)
     puma (5.5.2)
       nio4r (~> 2.0)
     pundit (2.1.1)
@@ -231,6 +236,19 @@ GEM
       rspec-mocks (~> 3.10)
       rspec-support (~> 3.10)
     rspec-support (3.10.3)
+    rswag (2.4.0)
+      rswag-api (= 2.4.0)
+      rswag-specs (= 2.4.0)
+      rswag-ui (= 2.4.0)
+    rswag-api (2.4.0)
+      railties (>= 3.1, < 7.0)
+    rswag-specs (2.4.0)
+      activesupport (>= 3.1, < 7.0)
+      json-schema (~> 2.2)
+      railties (>= 3.1, < 7.0)
+    rswag-ui (2.4.0)
+      actionpack (>= 3.1, < 7.0)
+      railties (>= 3.1, < 7.0)
     rubocop (1.23.0)
       parallel (~> 1.10)
       parser (>= 3.0.0.0)
@@ -302,6 +320,7 @@ DEPENDENCIES
   rails-controller-testing
   rolify
   rspec-rails
+  rswag
   rubocop
   shoulda-matchers
   sidekiq

@@ -8,7 +8,7 @@ module Api
       user = User.new(user_params)
       user.save!
       authorization = JWT.encode({ id: user.id }, Rails.application.credentials[:secret_token], 'HS256')
-      render json: { "Authorization": authorization, "user": user }, status: :accepted
+      render json: { "Authorization": authorization, "user": serialize_model(user) }, status: :accepted
     end
 
     def update
