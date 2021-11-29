@@ -50,7 +50,7 @@ paths:
     put:
       tags:
         - "users"
-      summary: "update users, user can only edit itself or it can edit others if it has a super_user role"
+      summary: "update users, user can only edit itself or it can edit others if it has a super_admin role"
       consumes:
         - "application/json"
       produces:
@@ -58,7 +58,7 @@ paths:
       parameters:
         - in: "path"
           name: "id"
-          description: "ID of the author"
+          description: "ID of the user to be updated"
           required: true
           type: "integer"
           example: 1
@@ -80,6 +80,37 @@ paths:
           description: "Valid params for user model"
           schema:
             $ref: "#/definitions/response_put_users"
+        "unprocessable entity":
+          description: "invalid params"
+          schema:
+            $ref: "#/definitions/response_errors"
+  /users/previous_versions/{id}:
+    get:
+      tags:
+        - "users"
+      summary: "only can be used by super_admin or content_manager user's roles"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "path"
+          name: "id"
+          description: "ID of the user to check previous versions"
+          required: true
+          type: "integer"
+          example: 1
+        - in: "header"
+          name: Authorization
+          type: "string"
+          description: Authorization token to get authorization to use this endpoint
+          required: true
+          example: "eyJhbGciOiJIUzI1NiJ9.eyJpZCI6Mn0.hBwXV_xQ2WctBK64_IeJMY0rzqmLIbzZAhS0HuoHtI8"
+      responses:
+        "Accepted":
+          description: "Valid params for user model"
+          schema:
+            $ref: "#/definitions/response_previous_versions_users"
         "unprocessable entity":
           description: "invalid params"
           schema:
@@ -157,6 +188,18 @@ definitions:
         type: "string"
         example: 23/06/1991
         description: user birth date
+  response_previous_versions_users:
+    description: list of previous versions of request user
+    type: array
+    example:
+      - id: 1
+        name: oscar
+        email: oscar@oscar.com
+        birthday: 06/06/1990
+      - id: 1
+        name: andres
+        email: andres@andres.com
+        birthday: 06/06/1991
   response_errors:
     type: "object"
     show: include errors message
