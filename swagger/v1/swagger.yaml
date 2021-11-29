@@ -181,6 +181,66 @@ paths:
           description: "invalid params"
           schema:
             $ref: "#/definitions/response_errors"
+  /comments/{id}:
+    delete:
+      tags:
+        - "comments"
+      summary: "delete comment by id"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "path"
+          name: "id"
+          description: "ID of the comment"
+          required: true
+          type: "integer"
+          example: 1
+        - in: "header"
+          name: Authorization
+          type: "string"
+          description: Authorization token to get authorization to use this endpoint
+          required: true
+          example: "eyJhbGciOiJIUzI1NiJ9.eyJpZCI6Mn0.hBwXV_xQ2WctBK64_IeJMY0rzqmLIbzZAhS0HuoHtI8"
+      responses:
+        "Accepted":
+          description: "Valid id comment and valid authorization token"
+          schema:
+            $ref: "#/definitions/response_destroy_comment"
+        "Forbidden":
+          description: "Current user is not super admin or content manager, so it is forbidden to do this action"
+        "Unauthorized":
+          description: "invalid Authorization token"
+        "Not Found":
+          description: "not comment has the provided id"
+          schema:
+            $ref: "#/definitions/response_errors"
+  /comments/all_deleted:
+    get:
+      tags:
+        - "comments"
+      summary: "delete comment by id"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "header"
+          name: Authorization
+          type: "string"
+          description: Authorization token to get authorization to use this endpoint
+          required: true
+          example: "eyJhbGciOiJIUzI1NiJ9.eyJpZCI6Mn0.hBwXV_xQ2WctBK64_IeJMY0rzqmLIbzZAhS0HuoHtI8"
+      responses:
+        "Accepted":
+          description: "valid authorization token"
+          schema:
+            $ref: "#/definitions/response_all_deleted_comments"
+        "Forbidden":
+          description: "Current user is not super admin or content manager, so it is forbidden to do this action"
+        "Unauthorized":
+          description: "invalid Authorization token"
 definitions:
   response_errors:
     type: "object"
@@ -302,3 +362,23 @@ definitions:
         type: "string"
         example: eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MTd9.FvSlMW56QXTRRsY_EGx-FFg6RVGt-UI_io-koqZs-OY
         description: Authorization token to add in the headers to authenticate
+  response_destroy_comment:
+    type: "object"
+    properties:
+      id:
+        type: "string"
+        example: 1
+        description: id of deleted comment
+  response_all_deleted_comments:
+    description: list of deleted comments
+    type: array
+    example:
+      - id: 1
+        message: message1
+        user_email: email1@email.com
+        article_id: 1
+      - id: 2
+        message: message2
+        user_email: email2@email.com
+        article_id: 2
+        
