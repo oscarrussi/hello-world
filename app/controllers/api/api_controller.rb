@@ -9,6 +9,7 @@ module Api
     rescue_from ActiveRecord::RecordNotFound, with: ->(e) { handle_error(e, :not_found) }
     rescue_from ActiveRecord::RecordInvalid, with: ->(e) { handle_error(e, :unprocessable_entity) }
     rescue_from Pagy::OverflowError, with: ->(e) { handle_error(e, :bad_request) }
+    rescue_from AASM::InvalidTransition, with: ->(e) { handle_error(e, :bad_request) }
 
     JsonapiErrorsHandler.configure do |config|
       config.handle_unexpected = true

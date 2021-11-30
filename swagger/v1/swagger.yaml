@@ -15,8 +15,6 @@ tags:
     description: comments made by users on each article
   - name: login
     description: so users can authenticate and get authorization to use the endpoints
-  - name: request books
-    description: requests users have make over the books from the bookstore
   - name: users
     description: register users that can use the endpoints
 paths:
@@ -264,6 +262,177 @@ paths:
             $ref: "#/definitions/response_get_categories"
         "Unauthorized":
           description: "invalid Authorization token"
+  /articles:
+    get:
+      tags:
+        - "articles"
+      summary: "get all articles in pending or reviewing state"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "header"
+          name: Authorization
+          type: "string"
+          description: Authorization token to get authorization to use this endpoint
+          required: true
+          example: "eyJhbGciOiJIUzI1NiJ9.eyJpZCI6Mn0.hBwXV_xQ2WctBK64_IeJMY0rzqmLIbzZAhS0HuoHtI8"
+      responses:
+        "Accepted":
+          description: "valid authorization token"
+          schema:
+            $ref: "#/definitions/response_get_articles"
+        "Forbidden":
+          description: "User doesn't have any of the roles required to use this endpoint"
+        "Unauthorized":
+          description: "invalid Authorization token"
+    post:
+      tags:
+        - "articles"
+      summary: "create a new article"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "header"
+          name: Authorization
+          type: "string"
+          description: Authorization token to get authorization to use this endpoint
+          required: true
+          example: "eyJhbGciOiJIUzI1NiJ9.eyJpZCI6Mn0.hBwXV_xQ2WctBK64_IeJMY0rzqmLIbzZAhS0HuoHtI8"
+        - in: "body"
+          name: body
+          description: "attributes of the article to be created"
+          type: "object"
+          required: true
+          schema:
+            $ref: "#/definitions/articles_create"
+      responses:
+        "Accepted":
+          description: "valid authorization token and valid attributes to create article"
+          schema:
+            $ref: "#/definitions/response_articles_create"
+        "Forbidden":
+          description: "User doesn't have any of the roles required to use this endpoint"
+        "Unauthorized":
+          description: "invalid Authorization token"
+  /articles/update_aasm/{id}:
+    put:
+      tags:
+        - "articles"
+      summary: "update state from an article"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "path"
+          name: "id"
+          description: "ID of the article"
+          required: true
+          type: "integer"
+          example: 1
+        - in: "header"
+          name: Authorization
+          type: "string"
+          description: Authorization token to get authorization to use this endpoint
+          required: true
+          example: "eyJhbGciOiJIUzI1NiJ9.eyJpZCI6Mn0.hBwXV_xQ2WctBK64_IeJMY0rzqmLIbzZAhS0HuoHtI8"
+        - in: "body"
+          name: body
+          description: "new article state"
+          type: "object"
+          required: true
+          schema:
+            $ref: "#/definitions/articles_update_aasm"
+      responses:
+        "Accepted":
+          description: "valid authorization token"
+          schema:
+            $ref: "#/definitions/response_articles_create"
+        "Forbidden":
+          description: "User doesn't have any of the roles required to use this endpoint"
+        "Unauthorized":
+          description: "invalid Authorization token"
+        "Not Found":
+          description: "No article with id provided"
+  /articles/{id}:
+    get:
+      tags:
+        - "articles"
+      summary: "the article by id"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "path"
+          name: "id"
+          description: "ID of the article"
+          required: true
+          type: "integer"
+          example: 1
+        - in: "header"
+          name: Authorization
+          type: "string"
+          description: Authorization token to get authorization to use this endpoint
+          required: true
+          example: "eyJhbGciOiJIUzI1NiJ9.eyJpZCI6Mn0.hBwXV_xQ2WctBK64_IeJMY0rzqmLIbzZAhS0HuoHtI8"
+      responses:
+        "Accepted":
+          description: "Valid article id and valid Authorization token"
+          schema:
+            $ref: "#/definitions/response_get_article"
+        "unprocessable entity":
+          description: "invalid params"
+          schema:
+            $ref: "#/definitions/response_errors"
+        "Forbidden":
+          description: "User doesn't have required roles to do this action"
+        "Not Found":
+          description: "No article with id provided"
+        "Unauthorized":
+          description: "Invalid authorization token"
+  /articles/{id}/comments?page={page}:
+    get:
+      tags:
+        - "articles"
+      summary: "get comments of an article by id"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "path"
+          name: "id"
+          description: "ID of the article"
+          required: true
+          type: "integer"
+          example: 1
+        - in: "path"
+          name: page
+          type: "integer"
+          description: page from which recover article's comments 
+          required: false
+        - in: "header"
+          name: Authorization
+          type: "string"
+          description: Authorization token to get authorization to use this endpoint
+          required: true
+          example: "eyJhbGciOiJIUzI1NiJ9.eyJpZCI6Mn0.hBwXV_xQ2WctBK64_IeJMY0rzqmLIbzZAhS0HuoHtI8"
+      responses:
+        "Ok":
+          description: "Valid article id and valid Authorization token"
+          schema:
+            $ref: "#/definitions/response_article_comments"
+        "Unauthorized":
+          description: "Invalid authorization token"
+        "Bad Request":
+          description: "pagy is out of range"
+        "Not Found":
+          description: "article not found"
 definitions:
   response_errors:
     type: "object"
@@ -414,4 +583,117 @@ definitions:
       - id: 2
         name: name2
         cod: cod2
-        
+  response_get_articles:
+    description: list of articles
+    type: array
+    example:
+      - id: 1
+        title: name1
+        content: cod1
+        aasm_state: pending
+        available_transitions:
+          type: array
+          example:
+            - event: review
+              state: reviewing
+            - event: reject
+              state: rejected
+      - id: 2
+        title: name2
+        content: cod2
+        aasm_state: pending
+        available_transitions:
+          type: array
+          example:
+            - event: review
+              state: reviewing
+            - event: reject
+              state: rejected
+  response_get_article:
+    type: "object"
+    show: article requested
+    properties:
+      id:
+        type: integer
+        description: unique identifier article
+        example: 1
+      title:
+        type: string
+        description: article's title
+        example: title1
+      content:
+        type: string
+        description: article's content
+        example: article1
+      aasm_state:
+        type: string
+        description: article's state, can be either; pending, reviewing, finished or cancelled
+        example: pending
+      available_transitions:
+        type: array
+        description: list of possible transitions for current state
+        example:
+          - event: review
+            state: reviewing
+          - event: reject
+            state: rejected
+  articles_create:
+    type: "object"
+    show: attributes new article
+    properties:
+      title:
+        type: string
+        description: article's title
+        example: title1
+      content:
+        type: string
+        description: article's content
+        example: article1
+  response_articles_create:
+    type: "object"
+    show: response when article is valid
+    properties:
+      id:
+        type: integer
+        description: unique identifier article
+        example: 1
+      title:
+        type: string
+        description: article's title
+        example: title1
+      content:
+        type: string
+        description: article's content
+        example: article1
+      aasm_state:
+        type: string
+        description: article's state, can be either; pending, reviewing, finished or cancelled
+        example: pending
+      available_transitions:
+        type: array
+        description: list of possible transitions for current state
+        example:
+          - event: review
+            state: reviewing
+          - event: reject
+            state: rejected
+  articles_update_aasm:
+    type: "object"
+    show: new article event to update state
+    properties:
+      event:
+        type: string
+        description: event to update article's state
+        example: finish
+  response_article_comments:
+    description: list of comments from requested article, filter by page (5 comments per page, at most)
+    type: array
+    example:
+      - id: 1
+        message: message1
+        user_email: email1@email.com
+        article_id: 1
+      - id: 2
+        message: message2
+        user_email: email2@email.com
+        article_id: 1

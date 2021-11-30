@@ -12,7 +12,7 @@ Rails.application.routes.draw do
 
   namespace :api do
     # devise_for :users
-    put "articles/update_aasm", to: "articles#update_aasm"
+    put "articles/update_aasm/:id", to: "articles#update_aasm"
     put "categories/update_many", to: "categories#update_many"
     get "comments/all_deleted", to: "comments#all_deleted"
     get "users/previous_versions/:id", to: "users#previous_versions"
